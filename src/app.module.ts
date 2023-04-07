@@ -8,7 +8,8 @@ import { AuthController } from './modules/auth/auth.controller';
 import { DataSource } from 'typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import fs from 'fs';
-import { CategoryModule } from '@modules/categories/category.module';
+import { CategoryModule } from '@modules/category/category.module';
+import { PostModule } from '@modules/post/post.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { CategoryModule } from '@modules/categories/category.module';
     AuthModule,
     UserModule,
     CategoryModule,
+    PostModule,
   ],
   controllers: [AppController, AuthController],
   providers: [AppService],

@@ -20,7 +20,15 @@ export class UserService {
     // select all except password
     queryBuilder
       .orderBy('users.id', pageOptionsDto.order)
-      .select(['users.id', 'users.email', 'users.role', 'users.status', 'users.avatar', 'users.gender', 'users.full_name'])
+      .select([
+        'users.id',
+        'users.email',
+        'users.role',
+        'users.status',
+        'users.avatar',
+        'users.gender',
+        'users.username',
+      ])
       .skip(pageOptionsDto.skip)
       .take(pageOptionsDto.limit);
 
@@ -39,7 +47,7 @@ export class UserService {
 
   async createOne(data: User | AuthCredentialDto): Promise<User> {
     const isUserExisted = await this.userRepository.findOneBy({
-      email: data.email,
+      username: data.username,
     });
     if (isUserExisted) {
       throw new NotFoundException('User is existed');

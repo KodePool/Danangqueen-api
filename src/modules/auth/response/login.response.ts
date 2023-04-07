@@ -10,6 +10,12 @@ export class LoginResponse {
 
   @ApiProperty({
     type: String,
+    example: 'username',
+  })
+  username: string;
+
+  @ApiProperty({
+    type: String,
     example: 'eyjdqoidjoqjdoi',
   })
   token: string;

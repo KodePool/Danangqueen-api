@@ -9,7 +9,7 @@ export class RegisterResponse {
 
   @ApiProperty({
     type: String,
-    example: 'example@gmail.com',
+    example: 'example',
   })
-  email: string;
+  username: string;
 }

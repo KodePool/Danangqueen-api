@@ -23,14 +23,18 @@ export class AuthService {
     const user = await this.userService.createOne(authCredentialDto);
     return {
       id: user.id,
-      email: user.email,
+      username: user.username,
     };
   }
 
   async login(user: User) {
-    const payload = { email: user.email, userId: user.id };
+    const payload = {
+      username: user.username,
+      userId: user.id,
+    };
     return {
       email: user.email,
+      username: user.username,
       token: this.jwtService.sign(payload),
       role: user.role,
     };
@@ -39,12 +43,12 @@ export class AuthService {
   async validateAndGetUser(
     authCredentialDto: AuthCredentialDto,
   ): Promise<User> {
-    const { email, password } = authCredentialDto;
+    const { username, password } = authCredentialDto;
     const isUserExisted = await this.userRepository.findOneBy({
-      email,
+      username,
     });
     if (!isUserExisted) {
-      throw new UnauthorizedException('email or password is incorrect');
+      throw new UnauthorizedException('username or password is incorrect');
     }
 
     const isValidPassword = await argon2.verify(
@@ -53,7 +57,7 @@ export class AuthService {
     );
 
     if (!isValidPassword) {
-      throw new UnauthorizedException('email or password is incorrect');
+      throw new UnauthorizedException('username or password is incorrect');
     }
 
     return isUserExisted;

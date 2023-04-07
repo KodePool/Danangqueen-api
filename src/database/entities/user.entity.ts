@@ -12,7 +12,10 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: true })
+  username: string;
+
+  @Column({ nullable: true })
   email: string;
 
   @Column()
@@ -26,9 +29,6 @@ export class User {
 
   @Column({ default: '' })
   avatar: string;
-
-  @Column({name: 'full_name', default: '' })
-  fullName: string;
 
   @Column({ default: true })
   status: boolean;
