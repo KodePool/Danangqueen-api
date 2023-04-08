@@ -14,13 +14,37 @@ import {
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { PostService } from './post.service';
 import { UpsertPostDto } from './dto/post.dto';
-import { Post as PostEntity } from '@database/entities';
+import { Comment, Post as PostEntity } from '@database/entities';
 import { PageDto } from '@core/pagination/dto/page.dto';
 import { FilterOptionDto } from '@core/pagination/dto/filter-option.dto';
+import { CommentService } from '@modules/comment/comment.service';
 
 @Controller('post')
 export class PostController {
-  constructor(private readonly postService: PostService) {}
+  constructor(
+    private readonly postService: PostService,
+
+    private readonly commentService: CommentService,
+  ) {}
+
+  @Get(':id/comments')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    tags: ['post'],
+    operationId: 'getAllComments',
+    summary: 'Get all comments',
+    description: 'Get all comments',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Successful',
+  })
+  async findManyComments(
+    @Param('id') id: number,
+    @Query() pageOptionsDto: FilterOptionDto,
+  ): Promise<PageDto<Comment>> {
+    return this.commentService.findAllByPostId(id, pageOptionsDto);
+  }
   @Get(':id')
   @AuthenticateGuard()
   @HttpCode(HttpStatus.OK)

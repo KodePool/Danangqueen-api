@@ -13,7 +13,7 @@ import { BaseEntity } from './base.entity';
 import { Image } from './image.entity';
 @Entity('posts')
 export class Post extends BaseEntity {
-  @Column()
+  @Column({ type: 'varchar', length: 255 })
   title: string;
 
   @Column({ type: 'text' })
@@ -26,7 +26,7 @@ export class Post extends BaseEntity {
   @JoinColumn({ name: 'category_id' })
   category: Category;
 
-  @OneToMany(() => Comment, (comment) => comment.post)
+  @OneToMany(() => Comment, (comment) => comment.post, { cascade: true })
   comments: Comment[];
 
   @ManyToMany(() => Image, {

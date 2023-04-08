@@ -17,7 +17,6 @@ export class UserService {
   async findAll(pageOptionsDto: PageOptionsDto): Promise<PageDto<User>> {
     const queryBuilder = this.userRepository.createQueryBuilder('users');
 
-    // select all except password
     queryBuilder
       .orderBy('users.id', pageOptionsDto.order)
       .select([

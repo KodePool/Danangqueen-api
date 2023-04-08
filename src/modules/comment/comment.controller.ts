@@ -3,41 +3,20 @@ import {
   Body,
   Controller,
   Delete,
-  Get,
   HttpCode,
   HttpStatus,
   Post,
   Param,
-  Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CommentService } from './comment.service';
-import { CreateCommentDto } from './dto/post.dto';
+import { CreateCommentDto } from './dto/comment.dto';
 import { Comment } from '@database/entities';
-import { PageOptionsDto } from '@core/pagination/dto/page-option.dto';
-import { PageDto } from '@core/pagination/dto/page.dto';
+import { ReviewCommentDto } from './dto/review.dto';
 
 @Controller('comment')
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
-
-  @Get()
-  @HttpCode(HttpStatus.OK)
-  @ApiOperation({
-    tags: ['comment'],
-    operationId: 'getAllComments',
-    summary: 'Get all comments',
-    description: 'Get all comments',
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Successful',
-  })
-  async findMany(
-    @Query() pageOptionsDto: PageOptionsDto,
-  ): Promise<PageDto<Comment>> {
-    return this.commentService.findAll(pageOptionsDto);
-  }
 
   @Delete(':id')
   @AuthenticateGuard()
@@ -70,5 +49,21 @@ export class CommentController {
   })
   async createOne(@Body() data: CreateCommentDto): Promise<Comment> {
     return this.commentService.createOne(data);
+  }
+
+  @Post(':id/review')
+  @AuthenticateGuard()
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({
+    tags: ['comment'],
+    operationId: 'reviewComment',
+    summary: 'Review One comment',
+    description: 'Review One comment',
+  })
+  async review(
+    @Param('id') id: number,
+    @Body() data: ReviewCommentDto,
+  ): Promise<void> {
+    await this.commentService.updateStatusOne(id, data.status);
   }
 }

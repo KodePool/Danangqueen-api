@@ -4,7 +4,7 @@ import { Comment, Post } from '@database/entities';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateCommentDto } from './dto/post.dto';
+import { CreateCommentDto } from './dto/comment.dto';
 import { PageOptionsDto } from '@core/pagination/dto/page-option.dto';
 
 @Injectable()
@@ -17,11 +17,15 @@ export class CommentService {
     private readonly postRepository: Repository<Post>,
   ) {}
 
-  async findAll(pageOptionsDto: PageOptionsDto): Promise<PageDto<Comment>> {
+  async findAllByPostId(
+    id: number,
+    pageOptionsDto: PageOptionsDto,
+  ): Promise<PageDto<Comment>> {
     const queryBuilder = this.commentRepository.createQueryBuilder('comments');
 
     queryBuilder
       .orderBy('comments.created_at', pageOptionsDto.order)
+      .where('comments.post_id = :id', { id })
       .skip(pageOptionsDto.skip)
       .take(pageOptionsDto.limit);
 
@@ -52,5 +56,11 @@ export class CommentService {
 
   async deleteOne(id: number): Promise<void> {
     await this.commentRepository.delete(id);
+  }
+
+  async updateStatusOne(id: number, status: string): Promise<void> {
+    const comment = await this.findOneById(id);
+    comment.status = status;
+    await this.commentRepository.save(comment);
   }
 }

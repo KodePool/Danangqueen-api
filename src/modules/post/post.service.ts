@@ -34,7 +34,7 @@ export class PostService {
   }
 
   async findOneById(id: number): Promise<Post> {
-    return this.postRepository.findOne({
+    return this.postRepository.findOneOrFail({
       where: { id },
       relations: ['comments'],
     });
@@ -54,9 +54,9 @@ export class PostService {
     return this.postRepository.save(post);
   }
 
-  async updateOne(id: number, data: UpsertPostDto): Promise<Category> {
+  async updateOne(id: number, data: UpsertPostDto): Promise<Post> {
     const post = await this.findOneById(id);
-    return this.categoryRepository.save({ ...post, ...data });
+    return this.postRepository.save({ ...post, ...data });
   }
 
   async deleteOne(id: number): Promise<void> {

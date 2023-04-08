@@ -3,9 +3,10 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostController } from './post.controller';
 import { PostService } from './post.service';
+import { CommentModule } from '@modules/comment/comment.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Post, Category, Image])],
+  imports: [CommentModule, TypeOrmModule.forFeature([Post, Category, Image])],
   controllers: [PostController],
   providers: [PostService],
   exports: [PostService],
