@@ -10,6 +10,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import fs from 'fs';
 import { CategoryModule } from '@modules/category/category.module';
 import { PostModule } from '@modules/post/post.module';
+import { CommentModule } from '@modules/comment/comment.module';
+import { ImageModule } from '@modules/image/image.module';
 
 @Module({
   imports: [
@@ -41,6 +43,8 @@ import { PostModule } from '@modules/post/post.module';
     UserModule,
     CategoryModule,
     PostModule,
+    CommentModule,
+    ImageModule,
   ],
   controllers: [AppController, AuthController],
   providers: [AppService],

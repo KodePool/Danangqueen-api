@@ -15,9 +15,8 @@ import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { PostService } from './post.service';
 import { UpsertPostDto } from './dto/post.dto';
 import { Post as PostEntity } from '@database/entities';
-import { PageOptionsDto } from '@core/pagination/dto/page-option.dto';
 import { PageDto } from '@core/pagination/dto/page.dto';
-import { FilterOptionDto } from './request/filterOption.dto';
+import { FilterOptionDto } from '@core/pagination/dto/filter-option.dto';
 
 @Controller('post')
 export class PostController {

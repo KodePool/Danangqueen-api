@@ -1,5 +1,4 @@
 import { PageMetaDto } from '@core/pagination/dto/page-meta.dto';
-import { PageOptionsDto } from '@core/pagination/dto/page-option.dto';
 import { PageDto } from '@core/pagination/dto/page.dto';
 import { Post } from '@database/entities';
 import { Category } from '@database/entities/category.entity';
@@ -7,7 +6,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UpsertPostDto } from './dto/post.dto';
-import { FilterOptionDto } from './request/filterOption.dto';
+import { FilterOptionDto } from '@core/pagination/dto/filter-option.dto';
 
 @Injectable()
 export class PostService {
@@ -20,10 +19,10 @@ export class PostService {
   ) {}
 
   async findAll(pageOptionsDto: FilterOptionDto): Promise<PageDto<Post>> {
-    const queryBuilder = this.postRepository.createQueryBuilder('posts');
+    const queryBuilder = this.postRepository.createQueryBuilder('users');
 
     queryBuilder
-      .orderBy('users.id', pageOptionsDto.order)
+      .orderBy('users.created_at', pageOptionsDto.order)
       .skip(pageOptionsDto.skip)
       .take(pageOptionsDto.limit);
 
@@ -35,7 +34,10 @@ export class PostService {
   }
 
   async findOneById(id: number): Promise<Post> {
-    return this.postRepository.findOneByOrFail({ id });
+    return this.postRepository.findOne({
+      where: { id },
+      relations: ['comments'],
+    });
   }
 
   async createOne(data: UpsertPostDto): Promise<Post> {

@@ -1,17 +1,9 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  BeforeInsert,
-  BeforeUpdate,
-} from 'typeorm';
+import { Entity, Column, BeforeInsert, BeforeUpdate } from 'typeorm';
 import * as argon2 from 'argon2';
 import { USER_ROLE } from '@shared/enum/user.enum';
+import { BaseEntity } from './base.entity';
 @Entity('users')
-export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class User extends BaseEntity {
   @Column({ nullable: true })
   username: string;
 
