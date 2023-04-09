@@ -9,6 +9,6 @@ export class Image extends BaseEntity {
   @Column({ type: 'text' })
   url: string;
 
-  @ManyToMany(() => Post, (post) => post.images)
+  @ManyToMany(() => Post, (post) => post.images, { onDelete: 'CASCADE' })
   posts: Post[];
 }

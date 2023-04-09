@@ -1,4 +1,4 @@
-import fs from 'fs';
+import { readFileSync } from 'fs';
 import { DataSource } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { config } from 'dotenv';
@@ -18,7 +18,7 @@ export const dataSource = new DataSource({
   ssl:
     configService.get('DB_USE_SSL') === 'true'
       ? {
-          ca: fs.readFileSync('ca-certificate.crt'),
+          ca: readFileSync('ca-certificate.crt'),
         }
       : undefined,
   migrations: ['src/database/migrations/*.ts'],

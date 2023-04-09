@@ -17,7 +17,7 @@ import {
 import { ImageService } from './image.service';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { imageOption } from '@core/config/image.config';
-import { UploadedImageResponse } from '@modules/cloudinary/response/uploaded-image.response';
+import { UploadedImageResponse } from '@modules/comment/dto/uploaded-image.response';
 
 @Controller('image')
 export class ImageController {

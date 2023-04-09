@@ -13,7 +13,7 @@ export class UpsertPostDto {
   content: string;
 
   @ApiProperty()
-  @IsNumber()
+  @IsString()
   @IsNotEmpty()
-  categoryId: number;
+  categoryId: string;
 }

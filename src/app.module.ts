@@ -7,7 +7,7 @@ import { UserModule } from './modules/user/user.module';
 import { AuthController } from './modules/auth/auth.controller';
 import { DataSource } from 'typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import fs from 'fs';
+import { readFileSync } from 'fs';
 import { CategoryModule } from '@modules/category/category.module';
 import { PostModule } from '@modules/post/post.module';
 import { CommentModule } from '@modules/comment/comment.module';
@@ -33,7 +33,7 @@ import { ImageModule } from '@modules/image/image.module';
         ssl:
           configService.get('DB_USE_SSL') === 'true'
             ? {
-                ca: fs.readFileSync('ca-certificate.crt'),
+                ca: readFileSync('ca-certificate.crt'),
               }
             : undefined,
       }),

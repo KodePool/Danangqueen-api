@@ -10,6 +10,8 @@ import {
   Param,
   Put,
   Query,
+  UseInterceptors,
+  UploadedFiles,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { PostService } from './post.service';
@@ -18,6 +20,8 @@ import { Comment, Post as PostEntity } from '@database/entities';
 import { PageDto } from '@core/pagination/dto/page.dto';
 import { FilterOptionDto } from '@core/pagination/dto/filter-option.dto';
 import { CommentService } from '@modules/comment/comment.service';
+import { imageOption } from '@core/config/image.config';
+import { FilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('post')
 export class PostController {
@@ -120,6 +124,7 @@ export class PostController {
   @Post()
   @AuthenticateGuard()
   @HttpCode(HttpStatus.CREATED)
+  @UseInterceptors(FilesInterceptor('images', 20, imageOption))
   @ApiOperation({
     tags: ['post'],
     operationId: 'createOne',
@@ -130,7 +135,10 @@ export class PostController {
     status: HttpStatus.CREATED,
     description: 'Successful',
   })
-  async createOne(@Body() data: UpsertPostDto): Promise<PostEntity> {
-    return this.postService.createOne(data);
+  async createOne(
+    @UploadedFiles() images: Array<Express.Multer.File>,
+    @Body() data: UpsertPostDto,
+  ): Promise<PostEntity> {
+    return this.postService.createOne(data, images);
   }
 }

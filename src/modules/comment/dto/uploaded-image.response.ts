@@ -3,4 +3,5 @@ export class UploadedImageResponse {
   public width: number;
   public height: number;
   public originalName: string;
+  public publicId: string;
 }
