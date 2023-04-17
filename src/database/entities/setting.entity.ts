@@ -2,24 +2,30 @@ import { Entity, Column } from 'typeorm';
 import { BaseEntity } from './base.entity';
 @Entity('settings')
 export class Setting extends BaseEntity {
-  @Column()
+  @Column({ default: '' })
   name: string;
 
-  @Column()
+  @Column({ default: '' })
   kakao: string;
 
-  @Column()
+  @Column({ default: 'admin@gmail.com' })
   email: string;
 
-  @Column()
+  @Column({ default: '' })
   phone: string;
 
-  @Column()
+  @Column({ default: '' })
   address: string;
 
-  @Column()
+  @Column({ default: '' })
   describe: string;
 
-  @Column()
+  @Column({ default: 0 })
   view: number;
+
+  @Column({ default: 0 })
+  order: number;
+
+  @Column({ name: 'view_auto_increment', default: 0 })
+  viewAutoIncrement: number;
 }

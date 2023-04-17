@@ -2,7 +2,7 @@ import { Category } from '@database/entities/category.entity';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Not } from 'typeorm';
-import { CategoryDto } from './dto/category.dto';
+import { UpsertCategoryDto } from './dto/category.dto';
 
 @Injectable()
 export class CategoryService {
@@ -19,9 +19,9 @@ export class CategoryService {
     return this.categoryRepository.findOneByOrFail({ id });
   }
 
-  async createOne(data: CategoryDto): Promise<Category> {
+  async createOne(data: UpsertCategoryDto): Promise<Category> {
     const isCategoryExisted = await this.categoryRepository.findOneBy({
-      name: data.name,
+      koreanName: data.koreanName,
     });
     if (isCategoryExisted) {
       throw new NotFoundException('Category is existed');
@@ -30,14 +30,14 @@ export class CategoryService {
     return this.categoryRepository.save(category);
   }
 
-  async updateOne(id: number, data: CategoryDto): Promise<Category> {
+  async updateOne(id: number, data: UpsertCategoryDto): Promise<Category> {
     const category = await this.findOneById(id);
     const isCategoryExisted = await this.categoryRepository.findOneBy({
-      name: data.name,
+      koreanName: data.koreanName,
       id: Not(id),
     });
     if (isCategoryExisted) {
-      throw new NotFoundException(`Category ${data.name} is existed`);
+      throw new NotFoundException(`Category ${data.koreanName} is existed`);
     }
     return this.categoryRepository.save({ ...category, ...data });
   }

@@ -1,19 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class UpsertCategoryDto {
+export class UpdatePasswordDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  koreanName: string;
+  oldPassword: string;
 
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  englishName: string;
-
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  address: string;
+  newPassword: string;
 }

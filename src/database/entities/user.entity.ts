@@ -13,14 +13,8 @@ export class User extends BaseEntity {
   @Column()
   password: string;
 
-  @Column({ default: USER_ROLE.USER })
+  @Column({ default: USER_ROLE.ADMIN })
   role: USER_ROLE;
-
-  @Column({ default: true })
-  gender: boolean;
-
-  @Column({ default: '' })
-  avatar: string;
 
   @Column({ default: true })
   status: boolean;

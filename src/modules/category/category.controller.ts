@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CategoryService } from './category.service';
-import { CategoryDto } from './dto/category.dto';
+import { UpsertCategoryDto } from './dto/category.dto';
 
 @Controller('category')
 export class CategoryController {
@@ -66,7 +66,7 @@ export class CategoryController {
   })
   async updateOne(
     @Param('id') id: number,
-    @Body() data: CategoryDto,
+    @Body() data: UpsertCategoryDto,
   ): Promise<Category> {
     return this.categoryService.updateOne(id, data);
   }
@@ -101,7 +101,7 @@ export class CategoryController {
     status: HttpStatus.CREATED,
     description: 'Successful',
   })
-  async createOne(@Body() data: CategoryDto): Promise<Category> {
+  async createOne(@Body() data: UpsertCategoryDto): Promise<Category> {
     return this.categoryService.createOne(data);
   }
 }

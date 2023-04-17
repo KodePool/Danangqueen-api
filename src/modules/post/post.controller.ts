@@ -50,7 +50,6 @@ export class PostController {
     return this.commentService.findAllByPostId(id, pageOptionsDto);
   }
   @Get(':id')
-  @AuthenticateGuard()
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     tags: ['post'],
