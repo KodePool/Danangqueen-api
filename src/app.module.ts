@@ -12,6 +12,7 @@ import { PostModule } from '@modules/post/post.module';
 import { CommentModule } from '@modules/comment/comment.module';
 import { ImageModule } from '@modules/image/image.module';
 import { SettingModule } from '@modules/setting/setting.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { SettingModule } from '@modules/setting/setting.module';
       }),
       inject: [ConfigService],
     }),
+    ScheduleModule.forRoot(),
     AuthModule,
     UserModule,
     CategoryModule,
