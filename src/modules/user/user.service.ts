@@ -74,7 +74,11 @@ export class UserService {
   async updatePassword(id: number, data: UpdatePasswordDto): Promise<void> {
     const user = await this.findOneById(id);
 
-    const isValidPassword = argon2.verify(user.password, data.oldPassword);
+    const isValidPassword = await argon2.verify(
+      user.password,
+      data.oldPassword,
+    );
+
     if (!isValidPassword) {
       throw new BadRequestException('Old password is invalid');
     }

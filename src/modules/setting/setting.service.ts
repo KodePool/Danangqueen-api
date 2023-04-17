@@ -12,7 +12,7 @@ export class SettingService {
   ) {}
 
   async find(): Promise<SettingEntity> {
-    return this.settingRepository.findOne({});
+    return (await this.settingRepository.find())[0];
   }
 
   async updateOne(data: UpdateSettingDto): Promise<SettingEntity> {
