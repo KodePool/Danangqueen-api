@@ -1,5 +1,9 @@
 import { Category } from '@database/entities/category.entity';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Not } from 'typeorm';
 import { UpsertCategoryDto } from './dto/category.dto';
@@ -24,7 +28,9 @@ export class CategoryService {
       koreanName: data.koreanName,
     });
     if (isCategoryExisted) {
-      throw new NotFoundException('Category is existed');
+      throw new BadRequestException(
+        `Category with name (${data.koreanName}) is existed`,
+      );
     }
     const category = this.categoryRepository.create(data);
     return this.categoryRepository.save(category);

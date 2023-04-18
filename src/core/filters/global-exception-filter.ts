@@ -29,7 +29,6 @@ export class GlobalExceptionsFilter implements ExceptionFilter {
   private handleHttpException(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
-    const statusCode = exception.getStatus();
     const customResponse: any = exception.getResponse();
     const message =
       customResponse || response.message || 'Unknown server errors';
@@ -40,10 +39,7 @@ export class GlobalExceptionsFilter implements ExceptionFilter {
       this.logger.exception(exception.stack);
     }
 
-    return response.status(exception.getStatus()).json({
-      statusCode,
-      message,
-    });
+    return response.status(exception.getStatus()).json(message);
   }
 
   /**
