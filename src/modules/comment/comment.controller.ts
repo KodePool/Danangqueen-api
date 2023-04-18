@@ -7,17 +7,38 @@ import {
   HttpStatus,
   Post,
   Param,
+  Get,
+  Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/comment.dto';
 import { Comment } from '@database/entities';
 import { ReviewCommentDto } from './dto/review.dto';
+import { FilterOptionDto } from '@core/pagination/dto/filter-option.dto';
+import { PageDto } from '@core/pagination/dto/page.dto';
 
 @Controller('comment')
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
+  @Get('')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    tags: ['comment'],
+    operationId: 'getAllComments',
+    summary: 'Get all comments',
+    description: 'Get all comments',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Successful',
+  })
+  async findManyComments(
+    @Query() pageOptionsDto: FilterOptionDto,
+  ): Promise<PageDto<Comment>> {
+    return this.commentService.findAll(pageOptionsDto);
+  }
   @Delete(':id')
   @AuthenticateGuard()
   @HttpCode(HttpStatus.OK)
