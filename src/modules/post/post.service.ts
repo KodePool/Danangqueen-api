@@ -25,9 +25,21 @@ export class PostService {
     const queryBuilder = this.postRepository.createQueryBuilder('posts');
 
     queryBuilder
-      .orderBy('posts.created_at', pageOptionsDto.order)
+      .leftJoinAndSelect('posts.comments', 'comments')
+      .leftJoinAndSelect('posts.images', 'images')
+      .leftJoinAndSelect('posts.category', 'category')
+      .orderBy('posts.createdAt', pageOptionsDto.order)
       .skip(pageOptionsDto.skip)
       .take(pageOptionsDto.limit);
+
+    if (pageOptionsDto.filter) {
+      const [key, value] = pageOptionsDto.filter.split('=');
+      if (key === 'categoryId') {
+        queryBuilder.andWhere('posts.category_id = :categoryId', {
+          categoryId: value,
+        });
+      }
+    }
 
     const itemCount = await queryBuilder.getCount();
     const data = await queryBuilder.getMany();
@@ -39,7 +51,7 @@ export class PostService {
   async findOneById(id: number): Promise<Post> {
     return this.postRepository.findOneOrFail({
       where: { id },
-      relations: ['comments', 'images'],
+      relations: ['comments', 'images', 'category'],
     });
   }
 
