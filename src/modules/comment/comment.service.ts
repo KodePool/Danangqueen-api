@@ -1,6 +1,6 @@
 import { PageMetaDto } from '@core/pagination/dto/page-meta.dto';
 import { PageDto } from '@core/pagination/dto/page.dto';
-import { Comment, Post } from '@database/entities';
+import { Comment } from '@database/entities';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -12,9 +12,6 @@ export class CommentService {
   constructor(
     @InjectRepository(Comment)
     private readonly commentRepository: Repository<Comment>,
-
-    @InjectRepository(Post)
-    private readonly postRepository: Repository<Post>,
   ) {}
 
   async findAll(pageOptionsDto: PageOptionsDto): Promise<PageDto<Comment>> {

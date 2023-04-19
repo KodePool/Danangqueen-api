@@ -25,7 +25,6 @@ export class PostService {
     const queryBuilder = this.postRepository.createQueryBuilder('posts');
 
     queryBuilder
-      .leftJoinAndSelect('posts.comments', 'comments')
       .leftJoinAndSelect('posts.images', 'images')
       .leftJoinAndSelect('posts.category', 'category')
       .orderBy('posts.createdAt', pageOptionsDto.order)
@@ -51,7 +50,7 @@ export class PostService {
   async findOneById(id: number): Promise<Post> {
     return this.postRepository.findOneOrFail({
       where: { id },
-      relations: ['comments', 'images', 'category'],
+      relations: ['images', 'category'],
     });
   }
 
