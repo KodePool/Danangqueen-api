@@ -5,7 +5,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateCommentDto } from './dto/comment.dto';
-import { PageOptionsDto } from '@core/pagination/dto/page-option.dto';
+import { FilterOptionDto } from '@core/pagination/dto/filter-option.dto';
+import { COMMENT_STATUS } from '@shared/enum/comment.enum';
 
 @Injectable()
 export class CommentService {
@@ -14,13 +15,22 @@ export class CommentService {
     private readonly commentRepository: Repository<Comment>,
   ) {}
 
-  async findAll(pageOptionsDto: PageOptionsDto): Promise<PageDto<Comment>> {
+  async findAll(
+    pageOptionsDto: FilterOptionDto,
+    isFilterApproved = false,
+  ): Promise<PageDto<Comment>> {
     const queryBuilder = this.commentRepository.createQueryBuilder('comments');
 
     queryBuilder
       .orderBy('comments.created_at', pageOptionsDto.order)
       .skip(pageOptionsDto.skip)
       .take(pageOptionsDto.limit);
+
+    if (isFilterApproved) {
+      queryBuilder.where('comments.status = :status', {
+        status: COMMENT_STATUS.APPROVED,
+      });
+    }
 
     const itemCount = await queryBuilder.getCount();
     const data = await queryBuilder.getMany();

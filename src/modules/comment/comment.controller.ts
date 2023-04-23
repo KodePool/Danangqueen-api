@@ -22,7 +22,8 @@ import { PageDto } from '@core/pagination/dto/page.dto';
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
-  @Get('')
+  @Get('all')
+  @AuthenticateGuard()
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     tags: ['comment'],
@@ -39,6 +40,25 @@ export class CommentController {
   ): Promise<PageDto<Comment>> {
     return this.commentService.findAll(pageOptionsDto);
   }
+
+  @Get('')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    tags: ['comment'],
+    operationId: 'getAllValidComments',
+    summary: 'Get all valid comments',
+    description: 'Get all valid comments',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Successful',
+  })
+  async findAllowedComment(
+    @Query() pageOptionsDto: FilterOptionDto,
+  ): Promise<PageDto<Comment>> {
+    return this.commentService.findAll(pageOptionsDto, true);
+  }
+
   @Delete(':id')
   @AuthenticateGuard()
   @HttpCode(HttpStatus.OK)
