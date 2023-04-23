@@ -5,7 +5,7 @@ import { Category } from '@database/entities/category.entity';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
-import { UpsertPostDto } from './dto/post.dto';
+import { CreatePostDto, UpdatePostDto } from './dto/post.dto';
 import { FilterOptionDto } from '@core/pagination/dto/filter-option.dto';
 import { ImageService } from '@modules/image/image.service';
 
@@ -55,7 +55,7 @@ export class PostService {
   }
 
   async createOne(
-    data: UpsertPostDto,
+    data: CreatePostDto,
     images: Array<Express.Multer.File>,
   ): Promise<Post> {
     const isCategoryExisted = await this.categoryRepository.findOneBy({
@@ -77,9 +77,35 @@ export class PostService {
     return this.postRepository.save(post);
   }
 
-  async updateOne(id: number, data: UpsertPostDto): Promise<Post> {
+  async updateOne(
+    id: number,
+    data: UpdatePostDto,
+    images: Array<Express.Multer.File>,
+  ): Promise<Post> {
+    const { categoryId, ...rest } = data;
     const post = await this.findOneById(id);
-    return this.postRepository.save({ ...post, ...data });
+
+    if (parseInt(categoryId) !== post.category.id) {
+      const isCategoryExisted = await this.categoryRepository.findOneBy({
+        id: parseInt(categoryId),
+      });
+      if (!isCategoryExisted) {
+        throw new NotFoundException('Category is not existed');
+      }
+      post.category = isCategoryExisted;
+    }
+
+    if (images.length > 0) {
+      const uploadedImages = await this.imageService.uploadManyFiles(images);
+      const createdNewImages = uploadedImages.map((image) => {
+        const img = new Image();
+        img.url = image.url;
+        img.name = image.publicId;
+        return img;
+      });
+      post.images = [...post.images, ...createdNewImages];
+    }
+    return this.postRepository.save({ ...post, ...rest });
   }
 
   async deleteOne(id: number): Promise<void> {
@@ -97,6 +123,25 @@ export class PostService {
         await Promise.all(
           imagesPublicId.map((id) => this.imageService.deleteFile(id)),
         );
+      },
+    );
+  }
+
+  async deleteImage(postId: number, imageIds: number[]): Promise<void> {
+    const post = await this.postRepository.findOneOrFail({
+      where: { id: postId },
+      relations: ['images'],
+    });
+    const imagesToDelete = post.images.filter((image) =>
+      imageIds.includes(image.id),
+    );
+    const imagesPublicId = imagesToDelete.map((image) => image.name);
+    await Promise.all(
+      imagesPublicId.map((id) => this.imageService.deleteFile(id)),
+    );
+    await this.postRepository.manager.transaction(
+      async (transactionalEntityManager) => {
+        await transactionalEntityManager.delete(Image, { id: In(imageIds) });
       },
     );
   }

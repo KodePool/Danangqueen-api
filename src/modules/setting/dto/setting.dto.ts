@@ -23,16 +23,6 @@ export class UpdateSettingDto {
   phone: string;
 
   @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  address: string;
-
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  describe: string;
-
-  @ApiProperty()
   @IsNumber()
   @IsNotEmpty()
   view: number;

@@ -14,12 +14,6 @@ export class Setting extends BaseEntity {
   @Column({ default: '' })
   phone: string;
 
-  @Column({ default: '' })
-  address: string;
-
-  @Column({ default: '' })
-  describe: string;
-
   @Column({ default: 0 })
   view: number;
 

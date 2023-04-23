@@ -20,7 +20,9 @@ export class Post extends BaseEntity {
   @Column({ default: 0 })
   view: number;
 
-  @ManyToOne(() => Category, (category) => category.posts)
+  @ManyToOne(() => Category, (category) => category.posts, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'category_id' })
   category: Category;
 

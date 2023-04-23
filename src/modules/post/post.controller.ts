@@ -15,7 +15,7 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { PostService } from './post.service';
-import { UpsertPostDto } from './dto/post.dto';
+import { CreatePostDto, DeleteImageDto, UpdatePostDto } from './dto/post.dto';
 import { Post as PostEntity } from '@database/entities';
 import { PageDto } from '@core/pagination/dto/page.dto';
 import { FilterOptionDto } from '@core/pagination/dto/filter-option.dto';
@@ -63,6 +63,7 @@ export class PostController {
   @Put(':id')
   @AuthenticateGuard()
   @HttpCode(HttpStatus.OK)
+  @UseInterceptors(FilesInterceptor('images', 20, imageOption))
   @ApiOperation({
     tags: ['post'],
     operationId: 'updateOne',
@@ -75,9 +76,10 @@ export class PostController {
   })
   async updateOne(
     @Param('id') id: number,
-    @Body() data: UpsertPostDto,
+    @Body() data: UpdatePostDto,
+    @UploadedFiles() images: Array<Express.Multer.File>,
   ): Promise<Partial<PostEntity>> {
-    return this.postService.updateOne(id, data);
+    return this.postService.updateOne(id, data, images);
   }
 
   @Delete(':id')
@@ -113,8 +115,28 @@ export class PostController {
   })
   async createOne(
     @UploadedFiles() images: Array<Express.Multer.File>,
-    @Body() data: UpsertPostDto,
+    @Body() data: CreatePostDto,
   ): Promise<PostEntity> {
     return this.postService.createOne(data, images);
+  }
+
+  @Delete(':id/images')
+  @AuthenticateGuard()
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({
+    tags: ['post'],
+    operationId: 'createOne',
+    summary: 'Create one post',
+    description: 'Create one post',
+  })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Successful',
+  })
+  async deleteImage(
+    @Param('id') id: number,
+    @Body() data: DeleteImageDto,
+  ): Promise<void> {
+    await this.postService.deleteImage(id, data.imageIds);
   }
 }
