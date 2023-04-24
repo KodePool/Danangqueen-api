@@ -9,7 +9,6 @@ export class CreatePostDto {
 
   @ApiProperty()
   @IsString()
-  @IsNotEmpty()
   content: string;
 
   @ApiProperty()
