@@ -14,7 +14,7 @@ export class Post extends BaseEntity {
   @Column({ type: 'varchar', length: 255 })
   title: string;
 
-  @Column({ type: 'text' })
+  @Column({ type: 'text', nullable: true })
   content: string;
 
   @Column({ default: 0 })
