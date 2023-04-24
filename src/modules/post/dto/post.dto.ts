@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsNotEmpty, IsString } from 'class-validator';
+import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreatePostDto {
   @ApiProperty()
@@ -9,6 +9,7 @@ export class CreatePostDto {
 
   @ApiProperty()
   @IsString()
+  @IsOptional()
   content: string;
 
   @ApiProperty()
