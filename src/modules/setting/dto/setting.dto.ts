@@ -10,7 +10,12 @@ export class UpdateSettingDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  kakao: string;
+  kakaoLink: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  kakaoId: string;
 
   @ApiProperty()
   @IsString()

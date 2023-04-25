@@ -6,7 +6,10 @@ export class Setting extends BaseEntity {
   name: string;
 
   @Column({ default: '' })
-  kakao: string;
+  kakaoLink: string;
+
+  @Column({ default: '' })
+  kakaoId: string;
 
   @Column({ default: 'admin@gmail.com' })
   email: string;
