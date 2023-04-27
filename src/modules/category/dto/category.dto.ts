@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
 
 export class UpsertCategoryDto {
   @ApiProperty()
@@ -16,4 +16,8 @@ export class UpsertCategoryDto {
   @IsString()
   @IsNotEmpty()
   address: string;
+
+  @ApiProperty()
+  @IsBoolean()
+  isActive: boolean;
 }

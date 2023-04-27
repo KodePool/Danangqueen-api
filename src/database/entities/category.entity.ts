@@ -12,6 +12,9 @@ export class Category extends BaseEntity {
   @Column({ name: 'address' })
   address: string;
 
+  @Column({ name: 'is_active', default: false })
+  isActive: boolean;
+
   @OneToMany(() => Post, (post) => post.category)
   posts: Post;
 }

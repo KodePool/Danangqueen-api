@@ -5,16 +5,16 @@ export class Setting extends BaseEntity {
   @Column({ default: '' })
   name: string;
 
-  @Column({ default: '' })
+  @Column({ name: 'kakao_link', default: '' })
   kakaoLink: string;
 
-  @Column({ default: '' })
+  @Column({ name: 'kakao_id', default: '' })
   kakaoId: string;
 
-  @Column({ default: 'admin@gmail.com' })
-  email: string;
+  @Column({ name: 'telegram_id', default: '' })
+  telegramId: string;
 
-  @Column({ default: '' })
+  @Column({ default: '', nullable: true })
   phone: string;
 
   @Column({ default: 0 })

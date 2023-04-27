@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class UpdateSettingDto {
   @ApiProperty()
@@ -20,11 +20,11 @@ export class UpdateSettingDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  email: string;
+  telegramId: string;
 
   @ApiProperty()
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   phone: string;
 
   @ApiProperty()
