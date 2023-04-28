@@ -5,10 +5,12 @@ import {
   JoinColumn,
   ManyToMany,
   JoinTable,
+  BeforeInsert,
 } from 'typeorm';
 import { Category } from './category.entity';
 import { BaseEntity } from './base.entity';
 import { Image } from './image.entity';
+import { randomNumberBetween } from '@shared/util/random';
 @Entity('posts')
 export class Post extends BaseEntity {
   @Column({ type: 'varchar', length: 255 })
@@ -41,4 +43,9 @@ export class Post extends BaseEntity {
     },
   })
   images: Image[];
+
+  @BeforeInsert()
+  generateView(): void {
+    this.view = randomNumberBetween(50, 150);
+  }
 }
