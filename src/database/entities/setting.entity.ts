@@ -17,12 +17,21 @@ export class Setting extends BaseEntity {
   @Column({ default: '', nullable: true })
   phone: string;
 
-  @Column({ default: 0 })
-  view: number;
+  @Column({ name: 'total_view', default: 0 })
+  totalView: number;
+
+  @Column({ name: 'yesterday_view', default: 0 })
+  yesterdayView: number;
+
+  @Column({ name: 'today_view', default: 0 })
+  todayView: number;
+
+  @Column({ name: 'max_view', default: 0 })
+  maxView: number;
 
   @Column({ default: 0 })
-  order: number;
+  reservation: number;
 
-  @Column({ name: 'view_auto_increment', default: 0 })
-  viewAutoIncrement: number;
+  @Column({ name: 'reservation_auto_increment', default: 0 })
+  reservationAutoIncrement: number;
 }

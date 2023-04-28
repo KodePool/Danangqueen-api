@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UpdateSettingDto } from './dto/setting.dto';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { randomNumberBetween } from '@shared/util/random';
 
 @Injectable()
 export class SettingService {
@@ -24,8 +25,12 @@ export class SettingService {
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async doUpdateViewCount(): Promise<void> {
     const setting = await this.find();
-    if (setting.viewAutoIncrement <= 0) return;
-    const view = setting.view + setting.viewAutoIncrement;
-    await this.settingRepository.save({ ...setting, view });
+
+    setting.totalView += setting.todayView;
+    setting.yesterdayView = setting.todayView;
+    setting.todayView = randomNumberBetween(100, 200);
+    setting.maxView = Math.max(setting.maxView, setting.todayView);
+    setting.reservation += setting.reservationAutoIncrement;
+    await this.settingRepository.save(setting);
   }
 }

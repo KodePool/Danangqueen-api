@@ -30,15 +30,30 @@ export class UpdateSettingDto {
   @ApiProperty()
   @IsNumber()
   @IsNotEmpty()
-  view: number;
+  totalView: number;
 
   @ApiProperty()
   @IsNumber()
   @IsNotEmpty()
-  order: number;
+  yesterdayView: number;
 
   @ApiProperty()
   @IsNumber()
   @IsNotEmpty()
-  viewAutoIncrement: number;
+  todayView: number;
+
+  @ApiProperty()
+  @IsNumber()
+  @IsNotEmpty()
+  maxView: number;
+
+  @ApiProperty()
+  @IsNumber()
+  @IsNotEmpty()
+  reservation: number;
+
+  @ApiProperty()
+  @IsNumber()
+  @IsNotEmpty()
+  reservationAutoIncrement: number;
 }
