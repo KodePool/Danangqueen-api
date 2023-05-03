@@ -26,7 +26,7 @@ export class UpdatePostDto {
 
   @ApiProperty()
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   content: string;
 
   @ApiProperty()
