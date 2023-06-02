@@ -6,7 +6,6 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { AuthController } from './modules/auth/auth.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { readFileSync } from 'fs';
 import { CategoryModule } from '@modules/category/category.module';
 import { PostModule } from '@modules/post/post.module';
 import { CommentModule } from '@modules/comment/comment.module';
@@ -31,12 +30,6 @@ import { ScheduleModule } from '@nestjs/schedule';
         autoLoadEntities: true,
         synchronize: false,
         maxQueryExecutionTime: configService.get<number>('DB_MAX_QUERY_TIME'),
-        ssl:
-          configService.get('DB_USE_SSL') === 'true'
-            ? {
-                ca: readFileSync('ca-certificate.crt'),
-              }
-            : undefined,
       }),
       inject: [ConfigService],
     }),
