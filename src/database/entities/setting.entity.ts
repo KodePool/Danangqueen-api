@@ -17,6 +17,9 @@ export class Setting extends BaseEntity {
   @Column({ default: '', nullable: true })
   phone: string;
 
+  @Column({ type: 'text', nullable: true })
+  introduction: string;
+
   @Column({ name: 'total_view', default: 0 })
   totalView: number;
 

@@ -28,6 +28,11 @@ export class UpdateSettingDto {
   phone: string;
 
   @ApiProperty()
+  @IsString()
+  @IsOptional()
+  introduction: string;
+
+  @ApiProperty()
   @IsNumber()
   @IsNotEmpty()
   totalView: number;
