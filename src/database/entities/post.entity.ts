@@ -3,9 +3,8 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
-  ManyToMany,
-  JoinTable,
   BeforeInsert,
+  OneToMany,
 } from 'typeorm';
 import { Category } from './category.entity';
 import { BaseEntity } from './base.entity';
@@ -28,20 +27,7 @@ export class Post extends BaseEntity {
   @JoinColumn({ name: 'category_id' })
   category: Category;
 
-  @ManyToMany(() => Image, {
-    cascade: true,
-  })
-  @JoinTable({
-    name: 'posts_images',
-    joinColumn: {
-      name: 'post_id',
-      referencedColumnName: 'id',
-    },
-    inverseJoinColumn: {
-      name: 'image_id',
-      referencedColumnName: 'id',
-    },
-  })
+  @OneToMany(() => Image, (image) => image.post)
   images: Image[];
 
   @BeforeInsert()

@@ -18,6 +18,9 @@ export class PostService {
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
 
+    @InjectRepository(Image)
+    private readonly imageRepository: Repository<Image>,
+
     private readonly imageService: ImageService,
   ) {}
 
@@ -54,10 +57,7 @@ export class PostService {
     });
   }
 
-  async createOne(
-    data: CreatePostDto,
-    images: Array<Express.Multer.File>,
-  ): Promise<Post> {
+  async createOne(data: CreatePostDto): Promise<Post> {
     const isCategoryExisted = await this.categoryRepository.findOneBy({
       id: parseInt(data.categoryId),
     });
@@ -65,25 +65,29 @@ export class PostService {
       throw new NotFoundException('Category is not existed');
     }
 
-    const uploadedImages = await this.imageService.uploadManyFiles(images);
+    const uploadedImages = data.images;
     const post = this.postRepository.create(data);
     post.category = isCategoryExisted;
-    post.images = uploadedImages.map((image) => {
+    const createdImages = uploadedImages.map((image) => {
       const img = new Image();
       img.url = image.url;
       img.name = image.publicId;
+      img.post = post;
       return img;
     });
-    return this.postRepository.save(post);
+
+    const createdPost = await this.postRepository.save(post);
+    await this.imageRepository.save(createdImages);
+
+    return createdPost;
   }
 
-  async updateOne(
-    id: number,
-    data: UpdatePostDto,
-    images: Array<Express.Multer.File>,
-  ): Promise<Post> {
-    const { categoryId, ...rest } = data;
-    const post = await this.findOneById(id);
+  async updateOne(id: number, data: UpdatePostDto): Promise<Post> {
+    const { categoryId, images, ...rest } = data;
+    const post = await this.postRepository.findOneOrFail({
+      where: { id },
+      relations: ['images', 'category'],
+    });
 
     if (parseInt(categoryId) !== post.category.id) {
       const isCategoryExisted = await this.categoryRepository.findOneBy({
@@ -94,17 +98,20 @@ export class PostService {
       }
       post.category = isCategoryExisted;
     }
-
+    let createdNewImages: Image[] = [];
     if (images.length > 0) {
-      const uploadedImages = await this.imageService.uploadManyFiles(images);
-      const createdNewImages = uploadedImages.map((image) => {
+      const newImages = images.map((image) => {
         const img = new Image();
         img.url = image.url;
         img.name = image.publicId;
+        img.post = { id: post.id } as Post;
         return img;
       });
-      post.images = [...post.images, ...createdNewImages];
+
+      createdNewImages = await this.imageRepository.save(newImages);
     }
+
+    post.images = [...post.images, ...createdNewImages];
     return this.postRepository.save({ ...post, ...rest });
   }
 

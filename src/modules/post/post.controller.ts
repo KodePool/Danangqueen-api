@@ -63,7 +63,6 @@ export class PostController {
   @Put(':id')
   @AuthenticateGuard()
   @HttpCode(HttpStatus.OK)
-  @UseInterceptors(FilesInterceptor('images', 20, imageOption))
   @ApiOperation({
     tags: ['post'],
     operationId: 'updateOne',
@@ -77,9 +76,8 @@ export class PostController {
   async updateOne(
     @Param('id') id: number,
     @Body() data: UpdatePostDto,
-    @UploadedFiles() images: Array<Express.Multer.File>,
   ): Promise<Partial<PostEntity>> {
-    return this.postService.updateOne(id, data, images);
+    return this.postService.updateOne(id, data);
   }
 
   @Delete(':id')
@@ -102,7 +100,6 @@ export class PostController {
   @Post()
   @AuthenticateGuard()
   @HttpCode(HttpStatus.CREATED)
-  @UseInterceptors(FilesInterceptor('images', 20, imageOption))
   @ApiOperation({
     tags: ['post'],
     operationId: 'createOne',
@@ -113,11 +110,8 @@ export class PostController {
     status: HttpStatus.CREATED,
     description: 'Successful',
   })
-  async createOne(
-    @UploadedFiles() images: Array<Express.Multer.File>,
-    @Body() data: CreatePostDto,
-  ): Promise<PostEntity> {
-    return this.postService.createOne(data, images);
+  async createOne(@Body() data: CreatePostDto): Promise<PostEntity> {
+    return this.postService.createOne(data);
   }
 
   @Delete(':id/images')

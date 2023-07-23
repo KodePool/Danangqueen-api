@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { UploadedImageResponse } from '../../comment/dto/uploaded-image.response';
 
 export class CreatePostDto {
   @ApiProperty()
@@ -16,6 +17,13 @@ export class CreatePostDto {
   @IsString()
   @IsNotEmpty()
   categoryId: string;
+
+  @ApiProperty({
+    type: [UploadedImageResponse],
+  })
+  @IsArray()
+  @IsNotEmpty()
+  images: UploadedImageResponse[];
 }
 
 export class UpdatePostDto {
@@ -36,6 +44,13 @@ export class UpdatePostDto {
 
   @ApiProperty()
   view: number;
+
+  @ApiProperty({
+    type: [UploadedImageResponse],
+  })
+  @IsArray()
+  @IsNotEmpty()
+  images: UploadedImageResponse[];
 }
 
 export class DeleteImageDto {

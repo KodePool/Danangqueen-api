@@ -23,67 +23,67 @@ import { UploadedImageResponse } from '@modules/comment/dto/uploaded-image.respo
 export class ImageController {
   constructor(private readonly imageService: ImageService) {}
 
-  // @Post('upload')
-  // @AuthenticateGuard()
-  // @ApiConsumes('multipart/form-data')
-  // @ApiBody({
-  //   schema: {
-  //     type: 'object',
-  //     properties: {
-  //       image: {
-  //         type: 'string',
-  //         format: 'binary',
-  //       },
-  //     },
-  //   },
-  // })
-  // @UseInterceptors(
-  //   FileInterceptor('image', {
-  //     limits: { fileSize: 5242880 },
-  //     fileFilter: imageOption.fileFilter,
-  //     dest: './uploads',
-  //   }),
-  // )
-  // @HttpCode(HttpStatus.CREATED)
-  // @ApiOperation({
-  //   tags: ['image'],
-  //   operationId: 'uploadImage',
-  //   summary: 'Upload one image',
-  //   description: 'Upload one image',
-  // })
-  // @ApiResponse({
-  //   status: HttpStatus.CREATED,
-  //   description: 'Successful',
-  // })
-  // async uploadFile(
-  //   @UploadedFile() file: Express.Multer.File,
-  // ): Promise<UploadedImageResponse> {
-  //   return this.imageService.uploadFile(file);
-  // }
+  @Post('upload')
+  @AuthenticateGuard()
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        image: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @UseInterceptors(
+    FileInterceptor('image', {
+      limits: { fileSize: 5242880 },
+      fileFilter: imageOption.fileFilter,
+      dest: './uploads',
+    }),
+  )
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({
+    tags: ['image'],
+    operationId: 'uploadImage',
+    summary: 'Upload one image',
+    description: 'Upload one image',
+  })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Successful',
+  })
+  async uploadFile(
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<UploadedImageResponse> {
+    return this.imageService.uploadFile(file);
+  }
 
-  // @Post('upload-many')
-  // @AuthenticateGuard()
-  // @ApiConsumes('multipart/form-data')
-  // @ApiBody({
-  //   schema: {
-  //     type: 'object',
-  //     properties: {
-  //       images: {
-  //         type: 'array',
-  //         items: {
-  //           type: 'string',
-  //           format: 'binary',
-  //         },
-  //       },
-  //     },
-  //   },
-  // })
-  // @UseInterceptors(FilesInterceptor('images', 10, imageOption))
-  // @ApiOperation({
-  //   tags: ['image'],
-  //   summary: 'Upload images',
-  // })
-  // async uploadFiles(@UploadedFiles() files: Array<Express.Multer.File>) {
-  //   return this.imageService.uploadManyFiles(files);
-  // }
+  @Post('upload-many')
+  @AuthenticateGuard()
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        images: {
+          type: 'array',
+          items: {
+            type: 'string',
+            format: 'binary',
+          },
+        },
+      },
+    },
+  })
+  @UseInterceptors(FilesInterceptor('images', 10, imageOption))
+  @ApiOperation({
+    tags: ['image'],
+    summary: 'Upload images',
+  })
+  async uploadFiles(@UploadedFiles() files: Array<Express.Multer.File>) {
+    return this.imageService.uploadManyFiles(files);
+  }
 }

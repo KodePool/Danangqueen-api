@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToMany } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { BaseEntity } from './base.entity';
 import { Post } from './post.entity';
 @Entity('images')
@@ -9,6 +9,7 @@ export class Image extends BaseEntity {
   @Column({ type: 'text' })
   url: string;
 
-  @ManyToMany(() => Post, (post) => post.images, { onDelete: 'CASCADE' })
-  posts: Post[];
+  @ManyToOne(() => Post, (post) => post.images, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'post_id' })
+  post: Post;
 }
